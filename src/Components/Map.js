@@ -2,8 +2,14 @@ import React from 'react';
 import GoogleMapReact from 'google-map-react';
 import Markers from './Markers';
 
-const api_key = "AIzaSyDuRWFGMaNOAhV_8ok_c7fcrG_UFWPh6Lg";
+// Google Maps Platform API key limited to 100 map loads/day
+const api_key = "YOUR_API_KEY";
+
+// Map/google-map-react options such as its appearance
+// https://github.com/google-map-react/google-map-react/blob/HEAD/API.md
 const map_options = {
+  mapTypeControl: false,
+  panControl: false,
   styles: [
     {
       "featureType": "water",
@@ -182,59 +188,47 @@ const map_options = {
   ]
 };
 
-// Geolocation
-if ("geolocation" in navigator) {
-
-  // Haversine
-  // http://www.movable-type.co.uk/scripts/latlong.html
-  // https://www.npmjs.com/package/haversine
-  const haversine = require('haversine');
-
-  navigator.geolocation.getCurrentPosition(function(position) {
-    const start = {
-      latitude: position.coords.latitude,
-      longitude: position.coords.longitude
-    };
-    const end = {
-      latitude: 46.769691,
-      longitude: -71.303277
-    };
-    console.log(haversine(start, end));
-    console.log(haversine(start, end, {unit: 'mile'}))
-    console.log(haversine(start, end, {unit: 'meter'}))
-    console.log(haversine(start, end, {threshold: 1}))
-    console.log(haversine(start, end, {threshold: 1, unit: 'mile'}))
-    console.log(haversine(start, end, {threshold: 1, unit: 'meter'}))
-  });
-
-} else console.log("?");
-
 class Map extends React.Component {
-
+  
   render() {
-
-    // Sets initial map center
-    let center = {
-        lat: 0,
-        lng: 0
-    }
-    // Changes map center if a city is selected
+    
+    // Checks for geolocated coordinates, sets the initial map center
+    // and changes it if a city is selected
+    let center;
     if (this.props.selectedCity) {
       center = {
-          lat: this.props.selectedCity.latitude,
-          lng: this.props.selectedCity.longitude
+        lat: this.props.selectedCity.latitude,
+        lng: this.props.selectedCity.longitude
+      }
+    } else if (this.props.currentLatitude && this.props.currentLongitude) {
+      center = {
+        lat: this.props.currentLatitude,
+        lng: this.props.currentLongitude
+      }
+    } else {
+      center = {
+        lat: 0,
+        lng: 0
       }
     }
-
+    
+    // Toggles map's classes and its visibility
+    let className = 'map';
+    if (this.props.search.length >= 3) {
+      className += ' map--active';
+    }
     return (
-      <div className = 'map'>
+      <div className = {className}>
         <GoogleMapReact
           bootstrapURLKeys = {{key: api_key}}
           center = {center}
           options = {map_options}
           zoom = {1}
         >
-          {this.props.cities.map((city) => {
+          {/* Verify some conditions to display the markers */}
+          {this.props.search.length >= 3 &&
+          this.props.cities ?
+          this.props.cities.map((city) => {
             return (
               <Markers
                 key = {city.id}
@@ -245,10 +239,16 @@ class Map extends React.Component {
                 regionCode = {city.regionCode}
                 country = {city.country}
                 countryCode = {city.countryCode}
-                selected = {city === this.props.selectedCity}
+                search = {this.props.search}
+                selectedCity = {city === this.props.selectedCity}
+                selectedCityDetails = {this.props.selectedCityDetails}
               />
             );
-          })}
+          })
+          // fallback alert if no city is found (for any reason)
+          : this.props.search.length >= 3 &&
+          alert('Essayez à nouveau, aucune ville trouvée. :(')
+          }
         </GoogleMapReact>
       </div>
     );

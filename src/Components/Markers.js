@@ -1,32 +1,41 @@
-import React from "react"
+import React from 'react';
+import marker from '../marker.svg';
+import marker_blue from '../marker-blue.svg';
 
 class Markers extends React.Component{
 
   render() {
 
-    let classes='marker';
-
-    if (this.props.selected) {
-      classes += ' marker--selected';
-      return(
-        <div className = {classes}>
-          <p>{this.props.name}</p>
-          <p>Pays: {this.props.country} ({this.props.countryCode})</p>
-          <p>Région: {this.props.region} ({this.props.regionCode})</p>
-          <p>Latitude: {this.props.lat}</p>
-          <p>Longitude: {this.props.lng}</p>
-        </div>
-      )
-    } else {
-      return(
-        <div className = {classes}>
-          <p>{this.props.name}, {this.props.country}</p>
-        </div>
-      )
+    // Toggles markers's classes and its visibility
+    let className = 'marker';
+    if (this.props.search.length >= 3 && this.props.selectedCity) {
+      className += ' marker--selected';
     }
 
-
-
+    return (
+      <div className = {className}>
+        {this.props.selectedCity ? <img src={marker_blue} alt=''/> : <img src={marker} alt=''/>}
+        <p>{this.props.name}, {this.props.countryCode}</p>
+        {this.props.search.length >= 3 && this.props.selectedCity && this.props.selectedCityDetails &&
+          <div className = 'details'>
+            <ul>
+              <li>Ville: {this.props.selectedCityDetails.city}</li>
+              <li>Province/État: {this.props.selectedCityDetails.region} ({this.props.selectedCityDetails.regionCode})</li>
+              <li>Pays: {this.props.selectedCityDetails.country} ({this.props.selectedCityDetails.countryCode})</li>
+              {this.props.selectedCityDetails.population &&
+                <li>Population: {this.props.selectedCityDetails.population}</li>
+              }
+              {this.props.selectedCityDetails.elevationMeters &&
+                <li>Altitude: {this.props.selectedCityDetails.elevationMeters}</li>
+              }
+              <li>Latitude: {this.props.selectedCityDetails.latitude}</li>
+              <li>Longitude: {this.props.selectedCityDetails.longitude}</li>
+              <li>Fuseau horaire: {this.props.selectedCityDetails.timezone}</li>
+            </ul>
+          </div>
+        }
+      </div>
+    );
   }
 
 }

@@ -18,6 +18,9 @@ class Results extends React.Component {
         <td className = 'city__coordinates'>
           {this.props.city.longitude}
         </td>
+        <td className = 'city__score'>
+          {this.props.city.distance} mi
+        </td>
       </tr>
     );
   }

@@ -16,7 +16,6 @@ fr: Déjà fonctionnel, mais toujours en développement.
 * [React](https://reactjs.org) - A JavaScript library for building user interfaces
 * [Sass](http://sass-lang.com) - CSS with superpowers
 * [google-map-react](https://www.npmjs.com/package/google-map-react) - A component written over a small set of the Google Maps API
-* [Haversine](https://www.npmjs.com/package/haversine) - A simple haversine formula module for Node.js
 
 ## Author
 

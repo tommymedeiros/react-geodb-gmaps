@@ -1,0 +1,41 @@
+// App title
+div.titles
+  left: calc(50% - 175px)
+  position: absolute
+  transition:
+    duration: .5s
+    property: top
+  top: calc(50% - 160px)
+  width: 350px
+  z-index: 1
+  &.titles--active
+    top: 20px
+    h1.title
+      font-size: 35px
+      word-spacing: -8px
+  h1.title
+    color: $grey
+    font:
+      size: 45px
+      weight: 700
+    margin: 0
+    text:
+      align: center
+      transform: lowercase
+    transition:
+      duration: .5s
+      property: font-size, word-spacing
+    word-spacing: -10px
+    span
+      color: $blue
+  // Credits
+  p.credits
+    font-size: 12px
+    opacity: 0
+    text:
+      align: center
+      transform: lowercase
+    transition: opacity .5s
+    &:hover
+      color: $grey
+      opacity: 1

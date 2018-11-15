@@ -1,0 +1,62 @@
+// Markers
+
+// Creates the animation of the marker when a city is selected
+@keyframes spin
+  from
+    transform: rotateY(0deg)
+  to
+    transform: rotateY(360deg)
+
+// Initial grey marker
+.marker
+  position: relative
+  img
+    float: left
+    width: 30px
+  img, p
+    display: inline-block
+    height: inherit
+  p
+    color: darken($grey, 5%)
+    font-size: 15px
+    font-weight: 700
+    padding: 7px 0 0
+    text-shadow: -1px -1px 0 white, 1px -1px 0 white, -1px 1px 0 white, 1px 1px 0 white
+    white-space: nowrap
+  // Blue marker + details when a city is selected
+  &.marker--selected
+    z-index: 2
+    img
+      animation:
+        duration: 1s
+        iteration-count: 1
+        name: spin
+        timing-function: linear
+    p
+      color: lighten($blue, 10%)
+    // Details' blue box
+    div.details
+      left: 40px
+      position: absolute
+      top: 40px
+      &.details--selected
+        display: block
+      ul
+        background-color: $transparent-blue
+        padding: 10px
+        &::before
+          content: ''
+          border-left: 0
+          border-right: 10px solid transparent
+          border-bottom: 10px solid $transparent-blue
+          height: 0px
+          left: 0
+          position: absolute
+          top: -10px
+          width: 0px
+        li
+          color: white
+          font-size: 13px
+          padding: 3px 0
+          white-space: nowrap
+      
